@@ -241,9 +241,10 @@ components:
           format: date-time
           examples: ["2026-05-18T08:30:15Z"]
         resolved_at:
-          type: [string, "null"]
+          type: string
           format: date-time
-          description: Thời điểm sự cố được xử lý xong. Dùng mảng kiểu dữ liệu thay thế hoàn toàn cho nullable cũ của OpenAPI 3.0.
+          nullable: true
+          description: Thời điểm sự cố được xử lý xong.
           examples: [null]
 
     # 4. Schema cấu trúc báo lỗi chuẩn hóa Problem Details (RFC 7807) áp dụng cho lỗi 4xx/5xx
@@ -269,8 +270,9 @@ components:
           type: string
           examples: ["Trường dữ liệu 'card_id' bắt buộc phải truyền và không được để trống."]
         instance:
-          type: [string, "null"]
+          type: string
           format: uri
+          nullable: true
           examples: ["/api/v1/events/access"]
 
     # 5. Schema Đa hình mô phỏng Hệ sinh thái Sự kiện (oneOf + discriminator nâng cao)
