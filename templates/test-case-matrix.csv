@@ -1,6 +1,9 @@
-ID,Folder,Endpoint,Method,Scenario,Input file/body,Expected status,Expected response check,Type,Pass/Fail,Evidence
-TC01,Functional,/health,GET,Service is alive,-,200,status=ok,functional,,
-TC02,Functional,/readings,POST,Create reading happy path,mock-data/sensor-reading-valid.json,201,"has reading_id, accepted=true",functional,,
-TC03,Negative,/readings,POST,Missing device_id,mock-data/sensor-reading-invalid-missing-device.json,400,Problem Details,negative,,
-TC04,Auth,/readings,POST,Missing token,mock-data/sensor-reading-valid.json,401,Problem Details,auth,,
-TC05,Boundary,/readings,POST,High temperature boundary,mock-data/sensor-reading-boundary.json,201/400,documented behavior,boundary,,
+ID,Method,Endpoint,InputCondition,ExpectedStatus,TestType,Description
+TC-01,GET,/health,No payload,200,Functional,Kiểm tra trạng thái sẵn sàng hoạt động của hệ thống
+TC-02,POST,/api/v1/events/access,Valid JSON data,201,Functional,Đẩy sự kiện quẹt thẻ hợp lệ và nhận kết quả đóng mở cửa
+TC-03,GET,/api/v1/alerts,Missing Bearer Token,401,Auth,Kiểm tra bảo mật API chặn các truy cập nặc danh
+TC-04,POST,/api/v1/events/access,Missing card_id field,400,Negative,Truyền thiếu trường bắt buộc để test cấu trúc ProblemDetails
+TC-05,GET,/api/v1/alerts/{id},Non-existent alert ID,404,Negative,Truyền mã cảnh báo giả lập để test lỗi không tìm thấy resource
+TC-06,POST,/api/v1/events/access,Spam quẹt thẻ liên tục,201,Boundary,Kiểm tra logic kích hoạt luật phòng chống gian lận thẻ
+TC-07,GET,/api/v1/gates/{id},Call AccessGate Mock,200,Consumer-Smoke,Core chủ động check kết nối ngoại vi sang cổng vật lý nhóm B3
+TC-08,GET,/health,Local environment check,200,Non-Functional,Kiểm tra SLA tốc độ xử lý mạng của service thật dưới 1000ms
