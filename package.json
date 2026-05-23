@@ -10,7 +10,7 @@
     "test:html": "newman run postman/collections/FIT4110_lab03_iot_ingestion.postman_collection.json -e postman/environments/FIT4110_lab03_mock.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/newman-report.html",
     "mock:core": "prism mock contracts/core-business.openapi.yaml --port 4010",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint:contracts": "spectral lint path/to/your/openapi.yaml"
+    "lint:contracts": "npx @stoplight/spectral-cli lint contracts/core-business.openapi.yaml"
   },
   "devDependencies": {
     "@stoplight/prism-cli": "^5.14.2",
