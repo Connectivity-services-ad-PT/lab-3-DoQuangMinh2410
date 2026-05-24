@@ -2,6 +2,9 @@ openapi: 3.1.0
 info:
   title: Smart Campus Core Business Service API
   version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
   description: |
     API Contract-First của dịch vụ xử lý nghiệp vụ trung tâm (Nhóm B6 - Product B).
     Hợp đồng này quy định luồng giao tiếp REST đồng bộ với Access Gate Service (Nhóm B3)
@@ -11,6 +14,8 @@ info:
     email: 1771020481@dnu.edu.vn
 
 servers:
+  # no-server-example.com warning is accepted because
+  # Prism mock server runs on localhost in lab environment  
   - url: http://localhost:4010
     description: Prism Mock Server dùng cho Lab 02
 
@@ -53,6 +58,12 @@ paths:
                     type: string
                     format: date-time
                     examples: ["2026-05-18T10:30:00Z"]
+        '400':
+            description: Yêu cầu không hợp lệ
+            content:
+              application/problem+json:
+                schema:
+                  $ref: '#/components/schemas/ProblemDetails'          
 
   /api/v1/events/access:
     post:
@@ -118,12 +129,26 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Alert'
+        '400':
+          description: Tham số truy vấn không hợp lệ
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
         '401':
           description: Không có quyền truy cập
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+
+        '404':
+          description: Không có dữ liệu cảnh báo
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'        
 
   /api/v1/alerts/{id}:
     get:
@@ -241,10 +266,9 @@ components:
           format: date-time
           examples: ["2026-05-18T08:30:15Z"]
         resolved_at:
-          type: string
+          type: [string, "null"]
           format: date-time
-          nullable: true
-          description: Thời điểm sự cố được xử lý xong.
+          description: Thời điểm sự cố được xử lý xong. Dùng mảng kiểu dữ liệu thay thế hoàn toàn cho nullable cũ của OpenAPI 3.0.
           examples: [null]
 
     # 4. Schema cấu trúc báo lỗi chuẩn hóa Problem Details (RFC 7807) áp dụng cho lỗi 4xx/5xx
@@ -270,10 +294,10 @@ components:
           type: string
           examples: ["Trường dữ liệu 'card_id' bắt buộc phải truyền và không được để trống."]
         instance:
-          type: string
+          type: [string, "null"]
           format: uri
-          nullable: true
-          examples: ["/api/v1/events/access"]
+          examples:
+            - "http://localhost:4010/api/v1/events/access"
 
     # 5. Schema Đa hình mô phỏng Hệ sinh thái Sự kiện (oneOf + discriminator nâng cao)
     GenericCampusEvent:
